@@ -3,7 +3,10 @@
 
 int main()
 {
-    const auto points = Point::getPoints("../data/n=1000_c=2.csv");
+    const auto points = Observation::getData("../data/n=1000_c=2.csv");
     for (auto &p : points)
-        std::cout << "x=" << p.getX() << " y=" << p.getY() << " label=" << p.getLabel() << std::endl;
+        std::cout << "x=" << p.getX() << " y=" << p.getY() << " label=" << p.getTrueLabel() << std::endl;
+
+    constexpr int k = 2;
+    const auto res = Kmeans::fit(points, k);
 }
