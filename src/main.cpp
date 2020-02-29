@@ -3,10 +3,10 @@
 
 int main()
 {
-    const auto points = Observation::getData("../data/n=1000_c=2.csv");
-    for (auto &p : points)
-        std::cout << "x=" << p.getX() << " y=" << p.getY() << " label=" << p.getTrueLabel() << std::endl;
+    auto points = Observation::getData("../data/n=100000_c=4.csv");
 
-    constexpr int k = 2;
-    const auto res = Kmeans::fit(points, k);
+    constexpr int k = 4;
+    const auto centroids = Kmeans::fit(points, k, 0.01, 100);
+    for (auto &c : centroids)
+        std::cout << c.getX() << " " << c.getY() << '\n';
 }
