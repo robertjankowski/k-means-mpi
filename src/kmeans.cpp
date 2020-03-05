@@ -103,8 +103,11 @@ std::vector<Observation> Kmeans::fit(std::vector<Observation> &initPoints, unsig
 
         updateCentroids(initPoints, centroids);
         double costNew = costFunction(initPoints, centroids);
-        // if (std::abs(costOld - costNew) < tolerance)
-        //     break;
+        if (std::abs(costOld - costNew) < tolerance)
+        {
+            std::cout << "Iteration: " << i << '\n';
+            break;
+        }
     }
     return centroids;
 }

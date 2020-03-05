@@ -40,6 +40,8 @@ private:
 
 public:
     static std::vector<Observation> fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance = 0.0001, int maxIteration = 500);
+    static std::vector<Observation> fitParallel(int worldRank, int worldSize, std::vector<Observation> &initPoints,
+                                                unsigned int k, double tolerance = 0.0001, int maxIteration = 500);
 };
 
 #endif // __K_MEANS__
