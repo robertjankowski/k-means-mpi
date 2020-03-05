@@ -1,6 +1,7 @@
 #include <iostream>
 #include "measure_time.h"
 #include "kmeans.h"
+#include "benchmark.h"
 
 int main()
 {
@@ -12,5 +13,8 @@ int main()
     //     std::cout << c.getX() << " " << c.getY() << '\n';
 
     auto elapsed_time = measure<milliseconds>::measure_time(Kmeans::fit, points, k, 0.01, 100).count();
-    std::cout << "Elapsed: " << elapsed_time  << " ms" << std::endl;
+    std::cout << "Elapsed: " << elapsed_time << " ms" << std::endl;
+
+    auto measureData = MeasureData{points, k, 0.01, 100};
+    // benchmark(Kmeans::fit, std::move(measureData), 10, "../benchmarks/n=1000_c=2.dat");
 }
