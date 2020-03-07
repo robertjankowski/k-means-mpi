@@ -15,8 +15,8 @@ struct MeasureData
     int maxIteration;
 };
 
-template <typename F>
-void benchmark(F &&f, MeasureData &&data, int nIteration, const std::string &outputFile)
+template <typename F, class... Args>
+void benchmark(F &&f, int nIteration, const std::string &outputFile, Args &&... args)
 {
     std::ofstream file(outputFile);
     if (file.bad())
@@ -29,12 +29,17 @@ void benchmark(F &&f, MeasureData &&data, int nIteration, const std::string &out
     elapsedTimes.reserve(nIteration);
     for (int i = 0; i < nIteration; ++i)
     {
-        const auto elapsedTime = measure<milliseconds>::measure_time(f, data.points, data.k, data.tolerance, data.maxIteration).count();
+        const auto elapsedTime = measure<milliseconds>::measure_time(f, args...).count();
         elapsedTimes.push_back(elapsedTime);
     }
 
     std::ostream_iterator<double> outputIterator(file, "\n");
     std::copy(elapsedTimes.begin(), elapsedTimes.end(), outputIterator);
+}
+
+void benchmarkSingle(MeasureData &&data, int nIteration, const std::string &outputfile) 
+{
+    benchmark(Kmeans::fit, nIteration, outputfile, data.points, data.k, data.tolerance, data.maxIteration);
 }
 
 #endif // __BENCHMARK__

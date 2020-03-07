@@ -85,7 +85,6 @@ void Kmeans::updateCentroids(const std::vector<Observation> &initPoints, std::ve
 std::vector<Observation> Kmeans::fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance, int maxIteration)
 {
     std::vector<Observation> centroids;
-    // random initialization
     std::vector<int> positions(initPoints.size());
     std::iota(positions.begin(), positions.end(), 0);
     std::random_shuffle(positions.begin(), positions.end(), [](const int i) { return rand() % i; });
