@@ -25,7 +25,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clusters', metavar='n_clusters',
                         type=int, help='Number of centers', required=True)
     parser.add_argument('-s', '--std', metavar='cluster_std',
-                        type=int, help='Std of cluster', default=0.5)
+                        type=float, help='Std of cluster', default=0.5)
 
     args = parser.parse_args()
     x, y, labels = generate_points(args.samples, args.clusters, args.std)
