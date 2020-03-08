@@ -3,6 +3,7 @@
 
 #include <type_traits>
 #include <chrono>
+#include <utility>
 
 using milliseconds = std::chrono::milliseconds;
 using microseconds = std::chrono::microseconds;
@@ -20,11 +21,12 @@ struct measure
     static_assert(is_duration<T>::value, "time must be std::chrono::duration");
       
     template <class F, class... Args>
-    static T measure_time(F &&func, Args &&... args)
+    static std::pair<T, int> measure_time(F &&func, Args &&... args)
     {
         const auto t0 = steady_clock::now();
-        std::forward<F>(func)(std::forward<Args>(args)...);
-        return std::chrono::duration_cast<T>(steady_clock::now() - t0);
+        const auto result = std::forward<F>(func)(std::forward<Args>(args)...);
+        const auto iteration = std::get<1>(result); // number of Kmeans iteration
+        return std::make_pair(std::chrono::duration_cast<T>(steady_clock::now() - t0), iteration);
     }
 };
 
