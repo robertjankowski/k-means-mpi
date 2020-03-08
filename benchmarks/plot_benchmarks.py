@@ -58,13 +58,13 @@ def plot_for_cluster(single_thread, openmp, cluster):
     plt.ylabel('time [ms/one iteration]')
     plt.title('Benchmark of Kmeans | k = ' + cluster)
     plt.legend()
-    #plt.savefig('../figures/benchmark_lenovo.png', bbox_inches='tight', dpi=300)
+    #plt.savefig('../figures/benchmark_lenovo.png', bbox_inches='tight', dpi=500)
     plt.show()
 
 
 if __name__ == "__main__":
     cluster_range = ['3', '5', '10']
-    data_single_thread = get_all_data("single", cluster_range)
-    data_open_mp = get_all_data("openmp", cluster_range)
+    data_single_thread = get_all_data("lenovo_results/single", cluster_range)
+    data_open_mp = get_all_data("lenovo_results/openmp", cluster_range)
 
     plot_for_cluster(data_single_thread, data_open_mp, '5')
