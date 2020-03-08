@@ -9,4 +9,4 @@
 | :-----------------------------------------------------------: |
 |  **Results for: `Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz`**  |
 
-![example](example_plot.png)
+![example](figures/kmeans-example.png)
