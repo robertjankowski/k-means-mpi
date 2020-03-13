@@ -51,7 +51,7 @@ void Kmeans::updateCentroids(const std::vector<Observation> &initPoints, std::ve
     }
 }
 
-ObservationsWithIteration Kmeans::fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance, int maxIteration)
+ObservationsWithIterations Kmeans::fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance, int maxIteration)
 {
     std::vector<Observation> centroids;
     std::vector<int> positions(initPoints.size());

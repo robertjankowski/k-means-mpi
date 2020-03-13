@@ -19,7 +19,7 @@ std::vector<std::string> split(const std::string &in, char delim)
     return out;
 }
 
-std::pair<std::string, int> loadFilenameWithK(int argc, char *argv[])
+std::pair<std::string, int> loadFilenameWithKClusters(int argc, char *argv[])
 {
     if (argc != 3)
     {

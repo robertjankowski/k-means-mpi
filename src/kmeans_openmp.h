@@ -12,7 +12,7 @@ private:
     static void updateCentroids(const std::vector<Observation> &initPoints, std::vector<Observation> &centroids);
 
 public:
-    static ObservationsWithIteration fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance = 0.0001, int maxIteration = 500);
+    static ObservationsWithIterations fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance = 0.0001, int maxIteration = 500);
 };
 
 #endif

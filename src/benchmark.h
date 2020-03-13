@@ -31,17 +31,17 @@ void benchmark(F &&f, int nIteration, const std::string &outputFile, Args &&... 
     elapsedTimes.reserve(nIteration);
     for (int i = 0; i < nIteration; ++i)
     {
-        const auto res = measure<milliseconds>::measure_time(f, args...);
-        const auto elapsedTime = std::get<0>(res).count();
-        const auto iteration = std::get<1>(res);
-        elapsedTimes.push_back(static_cast<double>(elapsedTime) / iteration);
+        const auto elapsedTimeWithIterations = measure<milliseconds>::measure_time(f, args...);
+        const auto elapsedTime = std::get<0>(elapsedTimeWithIterations).count();
+        const auto iterations = std::get<1>(elapsedTimeWithIterations);
+        elapsedTimes.push_back(static_cast<double>(elapsedTime) / iterations);
     }
 
     std::ostream_iterator<double> outputIterator(file, "\n");
     std::copy(elapsedTimes.begin(), elapsedTimes.end(), outputIterator);
 }
 
-void benchmarkSingle(MeasureData &&data, int nIteration, const std::string &outputfile) 
+void benchmarkSingle(MeasureData &&data, int nIteration, const std::string &outputfile)
 {
     benchmark(Kmeans::fit, nIteration, outputfile, data.points, data.k, data.tolerance, data.maxIteration);
 }

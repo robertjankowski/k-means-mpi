@@ -56,7 +56,7 @@ void KmeansOpenMP::updateCentroids(const std::vector<Observation> &initPoints, s
     }
 }
 
-ObservationsWithIteration KmeansOpenMP::fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance, int maxIteration)
+ObservationsWithIterations KmeansOpenMP::fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance, int maxIteration)
 {
     std::vector<Observation> centroids;
     std::vector<int> positions(initPoints.size());
@@ -71,6 +71,7 @@ ObservationsWithIteration KmeansOpenMP::fit(std::vector<Observation> &initPoints
     for (int i = 0; i < maxIteration; ++i)
     {
         double costOld = costFunction(initPoints, centroids);
+#pragma omp parallel for
         for (auto &point : initPoints)
             assignToClosestCentroid(point, centroids);
 

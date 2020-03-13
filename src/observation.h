@@ -29,6 +29,6 @@ public:
     Point getPoint() const { return Point(getX(), getY()); }
 };
 
-using ObservationsWithIteration = std::pair<std::vector<Observation>, int>;
+using ObservationsWithIterations = std::pair<std::vector<Observation>, int>;
 
 #endif // __OBSERVATION__

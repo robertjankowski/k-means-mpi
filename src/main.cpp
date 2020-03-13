@@ -8,9 +8,9 @@ int main(int argc, char *argv[])
 {
     srand(time(NULL));
     
-    const auto fileWithK = Utils::loadFilenameWithK(argc, argv);
+    const auto fileWithK = Utils::loadFilenameWithKClusters(argc, argv);
     const std::string inputFile = std::get<0>(fileWithK);
-    int k = std::get<1>(fileWithK);
+    const int k = std::get<1>(fileWithK);
  
     auto points = Observation::getData(inputFile);
     constexpr double tolerance = 0.001;
@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     // std::cout << "Elapsed: " << elapsed_time << " ms" << std::endl;
 
     auto measureData = MeasureData{points, k, tolerance, maxIteration};
-    const auto outFile = "../benchmarks/single_" + Utils::split(inputFile, '/').at(2); // get name of input file
+    const auto outputFileName = Utils::split(inputFile, '/').at(2);
+    const auto outFile = "../benchmarks/single_" + outputFileName;
     benchmarkSingle(std::move(measureData), 10, outFile);
 }

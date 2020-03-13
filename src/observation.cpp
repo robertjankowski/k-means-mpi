@@ -1,5 +1,6 @@
 #include <cmath>
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <sstream>
 #include "observation.h"
@@ -18,6 +19,11 @@ Observation::Observation(double x, double y, int clusterId) : Point(x, y), clust
 std::vector<Observation> Observation::getData(const std::string &filename)
 {
     std::ifstream file(filename);
+    if (file.bad())
+    {
+        std::cerr << "Unable to open file" << std::endl;
+        exit(1);
+    }
     std::vector<Observation> observations;
     std::string line;
     double x, y;

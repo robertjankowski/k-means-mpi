@@ -20,8 +20,11 @@ struct measure
 {
     static_assert(is_duration<T>::value, "time must be std::chrono::duration");
       
+    template<typename P>
+    using ElapsedTimeWithIterations = std::pair<P, int>;
+
     template <class F, class... Args>
-    static std::pair<T, int> measure_time(F &&func, Args &&... args)
+    static ElapsedTimeWithIterations<T> measure_time(F &&func, Args &&... args)
     {
         const auto t0 = steady_clock::now();
         const auto result = std::forward<F>(func)(std::forward<Args>(args)...);
