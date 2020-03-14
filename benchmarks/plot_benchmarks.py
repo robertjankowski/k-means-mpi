@@ -71,4 +71,4 @@ if __name__ == "__main__":
     data_open_mp = get_all_data("lenovo_results/openmp", cluster_range)
 
     plot_for_cluster([data_single_thread, data_open_mp],
-                     ['single thread', 'OpenMP'], cluster_range[1], filename='benchmark_lenovo')
+                     ['single thread', 'OpenMP'], cluster_range[1], filename='benchmark_lenovo_new')
