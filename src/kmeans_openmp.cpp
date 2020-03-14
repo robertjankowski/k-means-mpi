@@ -1,18 +1,20 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
-#include "kmeans.h"
+#include "kmeans_openmp.h"
 
-double Kmeans::costFunction(const std::vector<Observation> &points, const std::vector<Observation> &centroids)
+double KmeansOpenMP::costFunction(const std::vector<Observation> &points, const std::vector<Observation> &centroids)
 {
     double totalDistance = 0;
+#pragma omp parallel for reduction(+ \
+                                   : totalDistance)
     for (const auto &p : points)
         for (const auto &c : centroids)
             totalDistance += Point::distance(p, c);
     return totalDistance;
 }
 
-void Kmeans::assignToClosestCentroid(Observation &point, const std::vector<Observation> &centroids)
+void KmeansOpenMP::assignToClosestCentroid(Observation &point, const std::vector<Observation> &centroids)
 {
     double distance = 10000000;
     for (const auto &centroid : centroids)
@@ -26,12 +28,15 @@ void Kmeans::assignToClosestCentroid(Observation &point, const std::vector<Obser
     }
 }
 
-void Kmeans::updateCentroids(const std::vector<Observation> &initPoints, std::vector<Observation> &centroids)
+void KmeansOpenMP::updateCentroids(const std::vector<Observation> &initPoints, std::vector<Observation> &centroids)
 {
+#pragma omp parallel for
     for (auto &centroid : centroids)
     {
         double x = 0, y = 0;
         int counter = 0;
+#pragma omp parallel for default(shared) reduction(+ \
+                                                   : x, y, counter)
         for (const auto &p : initPoints)
         {
             if (p.getClusterId() == centroid.getClusterId())
@@ -51,7 +56,7 @@ void Kmeans::updateCentroids(const std::vector<Observation> &initPoints, std::ve
     }
 }
 
-ObservationsWithIterations Kmeans::fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance, int maxIteration)
+ObservationsWithIterations KmeansOpenMP::fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance, int maxIteration)
 {
     std::vector<Observation> centroids;
     std::vector<int> positions(initPoints.size());
@@ -66,6 +71,7 @@ ObservationsWithIterations Kmeans::fit(std::vector<Observation> &initPoints, uns
     for (int i = 0; i < maxIteration; ++i)
     {
         double costOld = costFunction(initPoints, centroids);
+#pragma omp parallel for
         for (auto &point : initPoints)
             assignToClosestCentroid(point, centroids);
 

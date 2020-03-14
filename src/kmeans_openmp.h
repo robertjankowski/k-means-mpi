@@ -1,10 +1,10 @@
-#ifndef __K_MEANS__
-#define __K_MEANS__
+#ifndef __KMEANS_OPENMP__
+#define __KMEANS_OPENMP__
 
-#include <utility>
 #include "observation.h"
+#include <utility>
 
-class Kmeans
+class KmeansOpenMP
 {
 private:
     static double costFunction(const std::vector<Observation> &points, const std::vector<Observation> &centroids);
@@ -15,4 +15,4 @@ public:
     static ObservationsWithIterations fit(std::vector<Observation> &initPoints, unsigned int k, double tolerance = 0.0001, int maxIteration = 500);
 };
 
-#endif // __K_MEANS__
+#endif
