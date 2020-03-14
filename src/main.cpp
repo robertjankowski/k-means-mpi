@@ -16,9 +16,10 @@ int main(int argc, char *argv[])
     constexpr double tolerance = 0.001;
     constexpr int maxIteration = 1000;
 
-#define SHOW_CLUSTERS FALSE
+#define SHOW_CLUSTERS false
 #if SHOW_CLUSTERS
-    const auto centroids = Kmeans::fit(points, k, tolerance, maxIteration);
+    const auto observationWithIteration = Kmeans::fit(points, k, tolerance, maxIteration);
+    const auto centroids = std::get<0>(observationWithIteration);
     for (auto &c : centroids)
         std::cout << c.getX() << " " << c.getY() << '\n';
 #endif
