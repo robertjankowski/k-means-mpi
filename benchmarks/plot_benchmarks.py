@@ -49,7 +49,7 @@ def plot_benchmark(df, label):
     plt.errorbar(df['n'], df["mean"], yerr=df['std'], label=label)
 
 
-def plot_for_cluster(thread_types, labels, cluster, is_savefig=False):
+def plot_for_cluster(thread_types, labels, cluster, filename=None):
     for thread_type, label in zip(thread_types, labels):
         plot_benchmark(thread_type[cluster], label)
     plt.xscale('log')
@@ -58,8 +58,8 @@ def plot_for_cluster(thread_types, labels, cluster, is_savefig=False):
     plt.ylabel('time [ms/one iteration]')
     plt.title('Benchmark of Kmeans | k = ' + cluster)
     plt.legend()
-    if is_savefig:
-        plt.savefig('../figures/benchmark_'+cluster +
+    if filename:
+        plt.savefig('../figures/' + filename +
                     '.png', bbox_inches='tight', dpi=500)
     else:
         plt.show()
@@ -71,4 +71,4 @@ if __name__ == "__main__":
     data_open_mp = get_all_data("lenovo_results/openmp", cluster_range)
 
     plot_for_cluster([data_single_thread, data_open_mp],
-                     ['single thread', 'OpenMP'], cluster_range[1])
+                     ['single thread', 'OpenMP'], cluster_range[1], filename='benchmark_lenovo')
