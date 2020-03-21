@@ -37,3 +37,9 @@ std::vector<Observation> Observation::getData(const std::string &filename)
     }
     return observations;
 }
+
+std::ostream &operator<<(std::ostream &os, const Observation &observation)
+{
+    os << "(" << observation.getX() << "," << observation.getY() << ")  id = " << observation.getClusterId();
+    return os;
+}

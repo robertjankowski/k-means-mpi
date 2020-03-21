@@ -2,7 +2,7 @@
 #include "measure_time.h"
 #include "kmeans_openmp.h"
 #include "utils.h"
-#include "benchmark.h"
+#include "benchmark_openmp.h"
 
 int main(int argc, char *argv[])
 {

@@ -2,27 +2,27 @@ CXX = g++
 CXXMPI = mpic++
 CXXFLAGS = -Wall -Wextra -pedantic -std=c++11 -O2 -fopenmp
 
-DEPS = kmeans.h kmeans_openmp.h observation.h utils.h benchmark.h
+DEPS = observation.h utils.h benchmark.h measure_time.h
 
-OBJBASE = observation.o kmeans.o kmeans_openmp.o 
-OBJ = $(OBJBASE) main.o
-OBJMP = $(OBJBASE) mainMP.o
-OBJMPI = $(OBJBASE) mainMPI.o
+OBJBASE = observation.o
+OBJ = $(OBJBASE) kmeans.o main.o
+OBJMP = $(OBJBASE) kmeans_openmp.o mainOpenMP.o
+OBJMPI = $(OBJBASE) kmeans_mpi.o mainMPI.o kmeans.o
 
-all: main mainMPI mainMP
+all: main mainMPI mainOpenMP
 
 %.o: %.c $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-main: $(OBJ)
+main: $(OBJ) kmeans.h benchmark_single.h
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
-mainMPI: $(OBJMPI)
+mainMPI: $(OBJMPI) kmeans_mpi.h 
 	$(CXXMPI) -o $@ $^ $(CXXFLAGS)
 
-mainMP: $(OBJMP)
+mainOpenMP: $(OBJMP) kmeans_openmp.h benchmark_openmp.h
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 .PHONY: clean
 clean: 
-	-rm -f $(OBJ) $(OBJMP) $(OBJMPI) main mainMPI mainMP
+	-rm -f $(OBJ) $(OBJMP) $(OBJMPI) main mainMPI mainOpenMP

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "measure_time.h"
 #include "kmeans.h"
-#include "benchmark.h"
+#include "benchmark_single.h"
 #include "utils.h"
 
 int main(int argc, char *argv[])
