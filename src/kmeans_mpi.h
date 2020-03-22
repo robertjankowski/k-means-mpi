@@ -32,7 +32,7 @@ std::vector<Observation> receiveFromMaster();
 }
 
 template <typename T>
-std::vector<std::vector<T>> splitByParts(const std::vector<T> &vec, int n)
+std::vector<std::vector<T>> splitVectorByParts(const std::vector<T> &vec, int n)
 {
     std::vector<std::vector<T>> output(n);
     int quotient = vec.size() / n;

@@ -8,7 +8,7 @@
 void Communication::Master::sendInitialPointsToWorkers(const std::vector<Observation> &points, int worldSize)
 {
     // Split input file into `n` worker nodes and send them datapoints
-    auto vecOfVecs = Communication::splitByParts<Observation>(points, worldSize - 1);
+    auto vecOfVecs = Communication::splitVectorByParts<Observation>(points, worldSize - 1);
     for (int i = 0; i < worldSize - 1; ++i)
     {
         auto input = vecOfVecs.at(i);

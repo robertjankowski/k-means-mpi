@@ -49,11 +49,8 @@ int main(int argc, char *argv[])
 
     std::cout << "rank: " << worldRank << " centroid size: " << centroids.size() << " all: " << allCentroids.size() << std::endl;
 
-    /**
-     * TODO: fix size issue, when centroids.size() is 2 all is correct, now is malloc() error...
-     */
-    MPI_Gather(centroids.data(), centroids.size() * sizeof(Observation), MPI_BYTE,
-               allCentroids.data(), centroids.size() * sizeof(Observation), MPI_BYTE, 0, MPI_COMM_WORLD);
+    MPI_Gather(centroids.data(), k * sizeof(Observation), MPI_BYTE,
+               allCentroids.data(), k * sizeof(Observation), MPI_BYTE, 0, MPI_COMM_WORLD);
     if (worldRank == 0)
     {
         for (const auto point : allCentroids)
