@@ -27,13 +27,12 @@ int main(int argc, char *argv[])
     std::vector<Communication::CentroidsForWorker> allCentroids;
     std::vector<Observation> centroids(k);
     if (worldRank == 0)
-        allCentroids.resize(k);
+        allCentroids.resize(worldSize - 1);
 
     if (worldRank == 0) // master node
     {
         const auto points = Observation::getData(inputFile);
         Communication::Master::sendInitialPointsToWorkers(points, worldSize);
-
         Communication::Master::receiveCentroids(allCentroids, worldSize);
     }
     else // workers nodes
