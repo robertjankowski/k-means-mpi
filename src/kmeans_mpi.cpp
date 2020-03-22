@@ -16,6 +16,23 @@ void Communication::Master::sendInitialPointsToWorkers(const std::vector<Observa
     }
 }
 
+void Communication::Master::receiveCentroids(std::vector<CentroidsForWorker> &allCentroids, int worldSize)
+{
+    for (int i = 0; i < worldSize - 1; ++i)
+    {
+        std::vector<Observation> centroid;
+        MPI_Status status;
+        MPI_Probe(i + 1, 0, MPI_COMM_WORLD, &status);
+
+        int incomingObservationsSize;
+        MPI_Get_count(&status, MPI_BYTE, &incomingObservationsSize);
+        centroid.resize(incomingObservationsSize / sizeof(Observation));
+
+        MPI_Recv(centroid.data(), incomingObservationsSize, MPI_BYTE, i + 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        allCentroids.at(i) = CentroidsForWorker{centroid, i + 1};
+    }
+}
+
 std::vector<Observation> Communication::Worker::receiveFromMaster()
 {
     std::vector<Observation> inputPoints;
@@ -28,6 +45,11 @@ std::vector<Observation> Communication::Worker::receiveFromMaster()
 
     MPI_Recv(inputPoints.data(), incomingObservationsSize, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     return inputPoints;
+}
+
+void Communication::Worker::sendCentroids(std::vector<Observation> &centroids)
+{
+    MPI_Send(centroids.data(), centroids.size() * sizeof(Observation), MPI_BYTE, 0, 0, MPI_COMM_WORLD);
 }
 
 double KmeansMPI::costFunction(const std::vector<Observation> &points, const std::vector<Observation> &centroids)

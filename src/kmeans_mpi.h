@@ -20,15 +20,23 @@ public:
 namespace Communication
 {
 
+    struct CentroidsForWorker {
+        std::vector<Observation> centroids;
+        int worker;
+    };
+
 namespace Master
 {
 void sendInitialPointsToWorkers(const std::vector<Observation> &points, int worldSize);
 
-}
+void receiveCentroids(std::vector<CentroidsForWorker> &allCentroids, int worldSize);
+} 
 
 namespace Worker
 {
 std::vector<Observation> receiveFromMaster();
+
+void sendCentroids(std::vector<Observation> &centroids);
 }
 
 template <typename T>
