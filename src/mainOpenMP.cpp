@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     for (auto &c : centroids)
         std::cout << c.getX() << " " << c.getY() << '\n';
 #endif
-    // auto elapsed_time = measure<milliseconds>::measure_time(Kmeans::fit, points, k, tolerance, maxIteration).count();
+    // auto elapsed_time = measure<milliseconds>::measure_time(KmeansOpenMP::fit, points, k, tolerance, maxIteration).first.count();
     // std::cout << "Elapsed: " << elapsed_time << " ms" << std::endl;
 
     auto measureData = MeasureData{points, k, tolerance, maxIteration};

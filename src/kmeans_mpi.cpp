@@ -128,3 +128,57 @@ int KmeansMPI::fit(std::vector<Observation> &initPoints, unsigned int k,
     }
     return maxIteration;
 }
+
+void KmeansMPI::mergeCentroids(const std::vector<Communication::CentroidsForWorker> &allCentroids, std::vector<Observation> &outputCentroids)
+{
+    if (outputCentroids.size() != allCentroids.at(0).centroids.size())
+        return;
+
+    // At fitst initialize outputCentroid from first worker
+    for (int i = 0; i < outputCentroids.size(); ++i)
+        outputCentroids.at(i) = allCentroids.at(0).centroids.at(i);
+
+    for (auto &centroid : outputCentroids)
+    {
+        std::vector<Point> newPoints(allCentroids.size());
+        for (const auto centroidWithId : allCentroids)
+        {
+            Point p;
+            findClosestPoint(p, centroid, centroidWithId.centroids);
+            double X = centroid.getX() + p.getX();
+            double Y = centroid.getY() + p.getY();
+            newPoints.emplace_back(X, Y);
+        }
+        double newX, newY;
+        calculateMeanPoint(newPoints, newX, newY);
+        centroid.setX(newX);
+        centroid.setY(newY);
+    }
+}
+
+void KmeansMPI::findClosestPoint(Point &p, const Observation &centroid, const std::vector<Observation> &centroids)
+{
+    double newDistance = 100000;
+    for (const auto point : centroids)
+    {
+        double distance = Point::distance(centroid.getPoint(), point);
+        if (distance < newDistance)
+        {
+            p = point;
+            newDistance = distance;
+        }
+    }
+}
+
+void KmeansMPI::calculateMeanPoint(const std::vector<Point> &points, double &newX, double &newY)
+{
+    newX = 0.0;
+    newY = 0.0;
+    for (const auto point : points)
+    {
+        newX += point.getX();
+        newY += point.getY();
+    }
+    newX /= points.size();
+    newY /= points.size();
+}

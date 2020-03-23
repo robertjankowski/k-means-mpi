@@ -25,37 +25,28 @@ int main(int argc, char *argv[])
     constexpr int maxIteration = 1000;
 
     std::vector<Communication::CentroidsForWorker> allCentroids;
-    std::vector<Observation> centroids(k);
-    if (worldRank == 0)
-        allCentroids.resize(worldSize - 1);
 
     if (worldRank == 0) // master node
     {
         const auto points = Observation::getData(inputFile);
         Communication::Master::sendInitialPointsToWorkers(points, worldSize);
+        allCentroids.resize(worldSize - 1);
         Communication::Master::receiveCentroids(allCentroids, worldSize);
+
+        std::vector<Observation> outputCentroids(k);
+        KmeansMPI::mergeCentroids(allCentroids, outputCentroids);
+        for (const auto centroid : outputCentroids)
+            std::cout << centroid << std::endl;
     }
     else // workers nodes
     {
         std::vector<Observation> inputPoints = Communication::Worker::receiveFromMaster();
         std::cout << "Process " << worldRank << " received " << inputPoints.size() << " observations\n";
 
+        std::vector<Observation> centroids(k);
         const auto iterations = KmeansMPI::fit(inputPoints, k, centroids, tolerance, maxIteration);
-        std::cout << "Process: " << worldRank << " | elapsed: " << iterations << std::endl;
         Communication::Worker::sendCentroids(centroids);
     }
 
-    std::cout << "rank: " << worldRank << " centroid size: " << centroids.size() << " all: " << allCentroids.size() << std::endl;
-
-    if (worldRank == 0)
-    {
-        for (const auto centroid : allCentroids)
-        {
-            std::cout << "Worker no. " << centroid.worker << std::endl;
-            for (const auto point : centroid.centroids)
-                std::cout << point << std::endl;
-            std::cout << std::endl;
-        }
-    }
     MPI_Finalize();
 }
