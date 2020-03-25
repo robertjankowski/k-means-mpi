@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     }
     else // workers nodes
     {
-        std::vector<Observation> inputPoints = Communication::Worker::receiveFromMaster();
+        auto inputPoints = Communication::Worker::receiveFromMaster();
         std::cout << "Process " << worldRank << " received " << inputPoints.size() << " observations\n";
 
         std::vector<Observation> centroids(k);

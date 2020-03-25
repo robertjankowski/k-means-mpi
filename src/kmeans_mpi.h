@@ -24,7 +24,7 @@ namespace Worker
 {
 std::vector<Observation> receiveFromMaster();
 
-void sendCentroids(std::vector<Observation> &centroids);
+void sendCentroids(const std::vector<Observation> &centroids);
 } // namespace Worker
 
 template <typename T>

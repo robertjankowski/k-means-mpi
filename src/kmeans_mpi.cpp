@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <limits>
 #include <random>
 #include <mpi.h>
 #include <utility>
@@ -8,16 +9,22 @@
 void Communication::Master::sendInitialPointsToWorkers(const std::vector<Observation> &points, int worldSize)
 {
     // Split input file into `n` worker nodes and send them datapoints
-    auto vecOfVecs = Communication::splitVectorByParts<Observation>(points, worldSize - 1);
+    const auto vecOfVecs = Communication::splitVectorByParts<Observation>(points, worldSize - 1);
     for (int i = 0; i < worldSize - 1; ++i)
     {
-        auto input = vecOfVecs.at(i);
+        const auto input = vecOfVecs.at(i);
         MPI_Send(input.data(), input.size() * sizeof(Observation), MPI_BYTE, i + 1, 0, MPI_COMM_WORLD);
     }
 }
 
 void Communication::Master::receiveCentroids(std::vector<CentroidsForWorker> &allCentroids, int worldSize)
 {
+    if (allCentroids.size() != worldSize - 1)
+    {
+        std::cerr << "Wrong centroids vector size. Cannot receive centroids from nodes\n";
+        return;
+    }
+
     for (int i = 0; i < worldSize - 1; ++i)
     {
         std::vector<Observation> centroid;
@@ -47,7 +54,7 @@ std::vector<Observation> Communication::Worker::receiveFromMaster()
     return inputPoints;
 }
 
-void Communication::Worker::sendCentroids(std::vector<Observation> &centroids)
+void Communication::Worker::sendCentroids(const std::vector<Observation> &centroids)
 {
     MPI_Send(centroids.data(), centroids.size() * sizeof(Observation), MPI_BYTE, 0, 0, MPI_COMM_WORLD);
 }
@@ -63,7 +70,7 @@ double KmeansMPI::costFunction(const std::vector<Observation> &points, const std
 
 void KmeansMPI::assignToClosestCentroid(Observation &point, const std::vector<Observation> &centroids)
 {
-    double distance = 10000000;
+    double distance = std::numeric_limits<double>::max();
     for (const auto &centroid : centroids)
     {
         double newDistance = Point::distance(point.getPoint(), centroid.getPoint());
@@ -103,6 +110,11 @@ void KmeansMPI::updateCentroids(const std::vector<Observation> &initPoints, std:
 int KmeansMPI::fit(std::vector<Observation> &initPoints, unsigned int k,
                    std::vector<Observation> &centroids, double tolerance, int maxIteration)
 {
+    if (centroids.size() != k)
+    {
+        std::cout << "Kmeans fit failed. Centroids vector should be size: " << k << " got: " << centroids.size() << " \n";
+        return -1;
+    }
     std::vector<int> positions(initPoints.size());
     std::iota(positions.begin(), positions.end(), 0);
     std::random_shuffle(positions.begin(), positions.end(), [](const int i) { return rand() % i; });
@@ -132,21 +144,24 @@ int KmeansMPI::fit(std::vector<Observation> &initPoints, unsigned int k,
 void KmeansMPI::mergeCentroids(const std::vector<Communication::CentroidsForWorker> &allCentroids, std::vector<Observation> &outputCentroids)
 {
     if (outputCentroids.size() != allCentroids.at(0).centroids.size())
+    {
+        std::cerr << "Wrong centroids sizes for merging\n";
         return;
+    }
 
-    // At fitst initialize outputCentroid from first worker
+    // At first initialize outputCentroid from first worker
     for (int i = 0; i < outputCentroids.size(); ++i)
         outputCentroids.at(i) = allCentroids.at(0).centroids.at(i);
 
     for (auto &centroid : outputCentroids)
     {
         std::vector<Point> newPoints(allCentroids.size());
-        for (const auto centroidWithId : allCentroids)
+        for (const auto &centroidWithId : allCentroids)
         {
             Point p;
             findClosestPoint(p, centroid, centroidWithId.centroids);
-            double X = centroid.getX() + p.getX();
-            double Y = centroid.getY() + p.getY();
+            const auto X = centroid.getX() + p.getX();
+            const auto Y = centroid.getY() + p.getY();
             newPoints.emplace_back(X, Y);
         }
         double newX, newY;
@@ -159,9 +174,9 @@ void KmeansMPI::mergeCentroids(const std::vector<Communication::CentroidsForWork
 void KmeansMPI::findClosestPoint(Point &p, const Observation &centroid, const std::vector<Observation> &centroids)
 {
     double newDistance = 100000;
-    for (const auto point : centroids)
+    for (const auto &point : centroids)
     {
-        double distance = Point::distance(centroid.getPoint(), point);
+        const auto distance = Point::distance(centroid.getPoint(), point);
         if (distance < newDistance)
         {
             p = point;
@@ -174,7 +189,7 @@ void KmeansMPI::calculateMeanPoint(const std::vector<Point> &points, double &new
 {
     newX = 0.0;
     newY = 0.0;
-    for (const auto point : points)
+    for (const auto &point : points)
     {
         newX += point.getX();
         newY += point.getY();

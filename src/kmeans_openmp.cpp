@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <limits>
 #include <random>
 #include "kmeans_openmp.h"
 
@@ -16,10 +17,10 @@ double KmeansOpenMP::costFunction(const std::vector<Observation> &points, const 
 
 void KmeansOpenMP::assignToClosestCentroid(Observation &point, const std::vector<Observation> &centroids)
 {
-    double distance = 10000000;
+    double distance = std::numeric_limits<double>::max();
     for (const auto &centroid : centroids)
     {
-        double newDistance = Point::distance(point.getPoint(), centroid.getPoint());
+        const auto newDistance = Point::distance(point.getPoint(), centroid.getPoint());
         if (newDistance < distance)
         {
             point.setClusterId(centroid.getClusterId());

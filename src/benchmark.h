@@ -7,8 +7,7 @@
 #include <iterator>
 #include <utility>
 #include "measure_time.h"
-#include "kmeans.h"
-#include "kmeans_openmp.h"
+#include "observation.h"
 
 struct MeasureData
 {

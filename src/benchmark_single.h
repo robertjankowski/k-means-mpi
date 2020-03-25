@@ -2,6 +2,7 @@
 #define __BENCHMARK_SINGLE__
 
 #include "benchmark.h"
+#include "kmeans.h"
 
 void benchmarkSingle(MeasureData &&data, int nIteration, const std::string &outputfile)
 {
