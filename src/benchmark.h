@@ -6,8 +6,8 @@
 #include <fstream>
 #include <iterator>
 #include <utility>
-#include "kmeans.h"
-#include "kmeans_openmp.h"
+#include "measure_time.h"
+#include "observation.h"
 
 struct MeasureData
 {
@@ -39,16 +39,6 @@ void benchmark(F &&f, int nIteration, const std::string &outputFile, Args &&... 
 
     std::ostream_iterator<double> outputIterator(file, "\n");
     std::copy(elapsedTimes.begin(), elapsedTimes.end(), outputIterator);
-}
-
-void benchmarkSingle(MeasureData &&data, int nIteration, const std::string &outputfile)
-{
-    benchmark(Kmeans::fit, nIteration, outputfile, data.points, data.k, data.tolerance, data.maxIteration);
-}
-
-void benchmarkOpenMP(MeasureData &&data, int nIteration, const std::string &outputfile)
-{
-    benchmark(KmeansOpenMP::fit, nIteration, outputfile, data.points, data.k, data.tolerance, data.maxIteration);
 }
 
 #endif // __BENCHMARK__

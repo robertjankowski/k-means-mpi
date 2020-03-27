@@ -1,7 +1,7 @@
 #include <iostream>
 #include "measure_time.h"
 #include "kmeans.h"
-#include "benchmark.h"
+#include "benchmark_single.h"
 #include "utils.h"
 
 int main(int argc, char *argv[])
@@ -23,11 +23,11 @@ int main(int argc, char *argv[])
     for (auto &c : centroids)
         std::cout << c.getX() << " " << c.getY() << '\n';
 #endif
-    // auto elapsed_time = measure<milliseconds>::measure_time(Kmeans::fit, points, k, tolerance, maxIteration).count();
+    // auto elapsed_time = measure<milliseconds>::measure_time(Kmeans::fit, points, k, tolerance, maxIteration).first.count();
     // std::cout << "Elapsed: " << elapsed_time << " ms" << std::endl;
 
     auto measureData = MeasureData{points, k, tolerance, maxIteration};
     const auto outputFileName = Utils::split(inputFile, '/').at(2);
-    const auto outFile = "../benchmarks/single_" + outputFileName;
+    const auto outFile = "../benchmarks/o3_single_" + outputFileName;
     benchmarkSingle(std::move(measureData), 10, outFile);
 }

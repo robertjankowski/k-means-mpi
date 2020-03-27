@@ -1,6 +1,7 @@
 #ifndef __UTILS__
 #define __UTILS__
 
+#include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -33,4 +34,4 @@ std::pair<std::string, int> loadFilenameWithKClusters(int argc, char *argv[])
 
 } // namespace Utils
 
-#endif
+#endif // __UTILS__
