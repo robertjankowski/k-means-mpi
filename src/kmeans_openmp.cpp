@@ -80,7 +80,7 @@ ObservationsWithIterations KmeansOpenMP::fit(std::vector<Observation> &initPoint
         double costNew = costFunction(initPoints, centroids);
         if (std::abs(costOld - costNew) < tolerance)
         {
-            std::cout << "Iteration: " << i << '\n';
+            // std::cout << "Iteration: " << i << '\n';
             return std::make_pair(centroids, i);
         }
     }
