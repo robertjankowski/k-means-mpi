@@ -55,7 +55,7 @@ def plot_for_cluster(thread_types, labels, cluster, filename=None):
     plt.xscale('log')
     # plt.yscale('log')
     plt.xlabel('N')
-    plt.ylabel('time [ms/one iteration]')
+    plt.ylabel('time [ms]')
     plt.title('Benchmark of Kmeans | k = ' + cluster)
     plt.legend()
     if filename:
@@ -67,8 +67,9 @@ def plot_for_cluster(thread_types, labels, cluster, filename=None):
 
 if __name__ == "__main__":
     cluster_range = ['3', '5', '10']
-    data_single_thread = get_all_data("lenovo_results/single", cluster_range)
-    data_open_mp = get_all_data("lenovo_results/openmp", cluster_range)
+    data_single_thread = get_all_data("testing/single", cluster_range)
+    data_open_mp = get_all_data("testing/openmp", cluster_range)
+    data_mpi = get_all_data("testing/mpi", cluster_range)
 
-    plot_for_cluster([data_single_thread, data_open_mp],
-                     ['single thread', 'OpenMP'], cluster_range[1], filename='benchmark_lenovo_new')
+    plot_for_cluster([data_single_thread, data_open_mp, data_mpi],
+                     ['single thread', 'OpenMP', "MPI"], cluster_range[2])
