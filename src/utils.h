@@ -24,7 +24,7 @@ std::pair<std::string, int> loadFilenameWithKClusters(int argc, char *argv[])
 {
     if (argc != 3)
     {
-        std::cerr << "Usage: " << argv[0] << " <data_filename> n_clusters\n";
+        std::cerr << "Usage: " << argv[0] << " <data_filename> <n_clusters>\n";
         exit(1);
     }
     const std::string inputFile = argv[1];

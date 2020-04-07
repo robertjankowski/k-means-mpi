@@ -57,12 +57,21 @@ def plot_for_cluster(thread_types, labels, cluster, filename=None):
     plt.xlabel('N')
     plt.ylabel('time [ms]')
     plt.title('Benchmark of Kmeans | k = ' + cluster)
-    plt.legend()
+    plt.legend(loc='upper left')
     if filename:
         plt.savefig('../figures/' + filename +
                     '.png', bbox_inches='tight', dpi=500)
-    else:
-        plt.show()
+
+    # plt.show()
+
+
+def plot_all(thread_types, labels, clusters, filename=None):
+    fig = plt.figure(figsize=(16, 5))
+    for i in range(len(clusters)):
+        plt.subplot(1, 3, i+1)
+        plot_for_cluster(thread_types, labels, clusters[i], filename)
+    # plt.show()
+    plt.savefig('../figures/lenovo_new_results.png', bbox_inches='tight', dpi=500)
 
 
 if __name__ == "__main__":
@@ -71,5 +80,5 @@ if __name__ == "__main__":
     data_open_mp = get_all_data("testing/openmp", cluster_range)
     data_mpi = get_all_data("testing/mpi", cluster_range)
 
-    plot_for_cluster([data_single_thread, data_open_mp, data_mpi],
-                     ['single thread', 'OpenMP', "MPI"], cluster_range[2])
+    plot_all([data_single_thread, data_open_mp, data_mpi],
+             ['single thread', 'OpenMP', "MPI"], cluster_range)

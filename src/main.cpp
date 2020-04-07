@@ -7,11 +7,11 @@
 int main(int argc, char *argv[])
 {
     srand(time(NULL));
-    
+
     const auto fileWithK = Utils::loadFilenameWithKClusters(argc, argv);
     const std::string inputFile = std::get<0>(fileWithK);
     const int k = std::get<1>(fileWithK);
- 
+
     auto points = Observation::getData(inputFile);
     constexpr double tolerance = 0.001;
     constexpr int maxIteration = 1000;
@@ -23,7 +23,9 @@ int main(int argc, char *argv[])
     for (auto &c : centroids)
         std::cout << c.getX() << " " << c.getY() << '\n';
 #endif
-    auto elapsed_time = measure<milliseconds>::measure_time(Kmeans::fit, points, k, tolerance, maxIteration).first.count();
+    const auto elapsed_time = measure<milliseconds>::measure_time(Kmeans::fit, points, k, tolerance, maxIteration)
+                                  .first
+                                  .count();
     std::cout << elapsed_time << std::endl;
 
     // auto measureData = MeasureData{points, k, tolerance, maxIteration};
