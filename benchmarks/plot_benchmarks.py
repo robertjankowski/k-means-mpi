@@ -49,11 +49,12 @@ def plot_benchmark(df, label):
     plt.errorbar(df['n'], df["mean"], yerr=df['std'], label=label)
 
 
-def plot_for_cluster(thread_types, labels, cluster, filename=None):
+def plot_for_cluster(thread_types, labels, cluster, filename=None, xlog=False):
     for thread_type, label in zip(thread_types, labels):
         plot_benchmark(thread_type[cluster], label)
     plt.xscale('log')
-    # plt.yscale('log')
+    if xlog:
+        plt.yscale('log')
     plt.xlabel('N')
     plt.ylabel('time [ms]')
     plt.title('Benchmark of Kmeans | k = ' + cluster)
@@ -62,23 +63,29 @@ def plot_for_cluster(thread_types, labels, cluster, filename=None):
         plt.savefig('../figures/' + filename +
                     '.png', bbox_inches='tight', dpi=500)
 
-    # plt.show()
 
-
-def plot_all(thread_types, labels, clusters, filename=None):
+def plot_all(thread_types, labels, clusters, filename=None, xlog=False):
     fig = plt.figure(figsize=(16, 5))
     for i in range(len(clusters)):
         plt.subplot(1, 3, i+1)
-        plot_for_cluster(thread_types, labels, clusters[i], filename)
-    # plt.show()
-    plt.savefig('../figures/lenovo_new_results.png', bbox_inches='tight', dpi=500)
+        plot_for_cluster(thread_types, labels, clusters[i], filename, xlog)
+    if filename:
+        plt.savefig('../figures/' + filename + '.png',
+                    bbox_inches='tight', dpi=500)
+    else:
+        plt.show()
+
+
+def load_all_data(path, cluster_range):
+    data_single_thread = get_all_data(path + '/single', cluster_range)
+    data_open_mp = get_all_data(path + '/openmp', cluster_range)
+    data_mpi = get_all_data(path + '/mpi', cluster_range)
+    return {'single thread': data_single_thread,
+            'OpenMP': data_open_mp,
+            'MPI': data_mpi}
 
 
 if __name__ == "__main__":
     cluster_range = ['3', '5', '10']
-    data_single_thread = get_all_data("testing/single", cluster_range)
-    data_open_mp = get_all_data("testing/openmp", cluster_range)
-    data_mpi = get_all_data("testing/mpi", cluster_range)
-
-    plot_all([data_single_thread, data_open_mp, data_mpi],
-             ['single thread', 'OpenMP', "MPI"], cluster_range)
+    data = load_all_data('new_testing', cluster_range)
+    plot_all(data.values(), data.keys(), cluster_range, xlog=True)

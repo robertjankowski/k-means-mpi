@@ -23,10 +23,10 @@ int main(int argc, char *argv[])
     for (auto &c : centroids)
         std::cout << c.getX() << " " << c.getY() << '\n';
 #endif
-    const auto elapsed_time = measure<milliseconds>::measure_time(KmeansOpenMP::fit, points, k, tolerance, maxIteration)
+    const auto elapsed_time = measure<microseconds>::measure_time(KmeansOpenMP::fit, points, k, tolerance, maxIteration)
                                   .first
                                   .count();
-    std::cout << elapsed_time << std::endl;
+    std::cout << static_cast<double>(elapsed_time) / 1000 << std::endl;
 
     // auto measureData = MeasureData{points, k, tolerance, maxIteration};
     // const auto outputFileName = Utils::split(inputFile, '/').at(2);
