@@ -11,7 +11,7 @@
 
 | ![figures/spell](figures/spell_benchmark.png) |
 | :-----------------------------------------------------------: |
-|  **Results for: `Intel(R) Xeon(R) CPU @ 2.20GHz` ([Spell](https://spell.run/)) **  |
+|  **Results for: `Intel(R) Xeon(R) CPU @ 2.20GHz` ([Spell](https://spell.run/))**  |
 
 
 ![example](figures/kmeans-example.png)
