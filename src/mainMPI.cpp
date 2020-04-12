@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     MPI_Barrier(MPI_COMM_WORLD);
     const double end = MPI_Wtime();
     if (worldRank == 0)
-       std::cout << (end - start) / 1000 << "\n"; // in ms
+       std::cout << (end - start) * 1000 << "\n"; // in ms
 
     MPI_Finalize();
 }

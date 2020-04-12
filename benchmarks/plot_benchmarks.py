@@ -87,5 +87,5 @@ def load_all_data(path, cluster_range):
 
 if __name__ == "__main__":
     cluster_range = ['3', '5', '10']
-    data = load_all_data('new_testing', cluster_range)
+    data = load_all_data('spell_results', cluster_range)
     plot_all(data.values(), data.keys(), cluster_range, xlog=True)

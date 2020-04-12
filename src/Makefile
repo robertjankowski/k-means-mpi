@@ -7,7 +7,7 @@ DEPS = observation.h utils.h benchmark.h measure_time.h
 OBJBASE = observation.o
 OBJ = $(OBJBASE) kmeans.o main.o
 OBJMP = $(OBJBASE) kmeans_openmp.o mainOpenMP.o
-OBJMPI = $(OBJBASE) kmeans_mpi.o mainMPI.o kmeans.o
+OBJMPI = $(OBJBASE) kmeans_mpi.o mainMPI.o
 
 all: main mainMPI mainOpenMP
 
