@@ -25,7 +25,7 @@ def get_data_for_cluster(files, c):
     clusters = []
     for f in files:
         if 'c='+c in f:
-            num = re.search("\d+", f)
+            num = re.search(r"\d+", f)
             num = num.group()
             clusters.append((f, num))
     return clusters
@@ -65,7 +65,7 @@ def plot_for_cluster(thread_types, labels, cluster, filename=None, xlog=False):
 
 
 def plot_all(thread_types, labels, clusters, filename=None, xlog=False):
-    fig = plt.figure(figsize=(16, 5))
+    plt.figure(figsize=(16, 5))
     for i in range(len(clusters)):
         plt.subplot(1, 3, i+1)
         plot_for_cluster(thread_types, labels, clusters[i], filename, xlog)
@@ -79,13 +79,15 @@ def plot_all(thread_types, labels, clusters, filename=None, xlog=False):
 def load_all_data(path, cluster_range):
     data_single_thread = get_all_data(path + '/single', cluster_range)
     data_open_mp = get_all_data(path + '/openmp', cluster_range)
-    data_mpi = get_all_data(path + '/mpi', cluster_range)
+    data_mpi_single_node = get_all_data(path + '/mpi_one', cluster_range)
+    data_mpi_three_nodes = get_all_data(path + '/mpi_three', cluster_range)
     return {'single thread': data_single_thread,
             'OpenMP': data_open_mp,
-            'MPI': data_mpi}
+            'MPI (1 node)': data_mpi_single_node,
+            'MPI (3 nodes)': data_mpi_three_nodes}
 
 
 if __name__ == "__main__":
     cluster_range = ['3', '5', '10']
-    data = load_all_data('spell_results', cluster_range)
-    plot_all(data.values(), data.keys(), cluster_range, xlog=True)
+    data = load_all_data('vm_cluster', cluster_range)
+    plot_all(data.values(), data.keys(), cluster_range, xlog=True, filename="vm_cluster__benchmarks_results")

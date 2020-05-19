@@ -9,6 +9,12 @@
 | :-----------------------------------------------------------: |
 |  **Results for: `Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz`**  | -->
 
+
+| ![figures/spell](figures/vm_cluster__benchmarks_results.png) |
+| :-----------------------------------------------------------: |
+|  **Benchmarks on VM cluster on local laptop (`Intel Core i5-6300HQ`)**  |
+
+
 | ![figures/spell](figures/spell_benchmark.png) |
 | :-----------------------------------------------------------: |
 |  **Results for: `Intel(R) Xeon(R) CPU @ 2.20GHz` ([Spell](https://spell.run/))**  |
